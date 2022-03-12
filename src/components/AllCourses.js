@@ -1,28 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Course from "./Course";
+import base_url from "./../api/bootapi";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 function AllCourses() {
-  const [courses, setCourses] = useState([
-    {
-      title: "Course Title 1",
-      description: "Course Description 1",
-    },
-    {
-      title: "Course Title 2",
-      description: "Course Description 2",
-    },
-    {
-      title: "Course Title 3",
-      description: "Course Description 3",
-    },
-  ]);
+  useEffect(() => {
+    document.title = "All Courses";
+    getAllCoursesFromServer();
+  }, []);
+
+  // function to call server...
+  const getAllCoursesFromServer = () => {
+    axios.get(`${base_url}/courses`).then(
+      (response) => {
+        console.log(response.data);
+        toast.success("Courses has been loaded!");
+        setCourses(response.data);
+      },
+      (error) => {
+        console.log(error);
+        toast.error("Something went wrong!");
+      }
+    );
+  };
+
+  const [courses, setCourses] = useState({});
+
+  const removeCourseByIdAfterUpdate = (id) => {
+    setCourses(courses.filter((c) => c.id !== id));
+  };
 
   return (
     <div>
-      <h1>All Courses</h1>
       <p>List of courses are as follows:</p>
       {courses.length > 0
-        ? courses.map((item) => <Course course={item} />)
+        ? courses.map((item) => (
+            <Course
+              key={item.id}
+              course={item}
+              remove={removeCourseByIdAfterUpdate}
+            />
+          ))
         : "No course found"}
     </div>
   );

@@ -1,6 +1,7 @@
 import "./App.css";
+import React, { useEffect } from "react";
 import { Container, Row, Col } from "reactstrap";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./components/Home";
@@ -9,12 +10,17 @@ import AddCourse from "./components/AddCourse";
 import Menus from "./components/Menus";
 
 function App() {
+  useEffect(() => {
+    document.title = "Courses Application";
+  }, []);
+
+  /*
   const btnHandle = () => {
     toast.error("Done", {
       position: "top-center",
     });
   };
-
+  */
   return (
     <div>
       <Router>
